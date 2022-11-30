@@ -1,0 +1,3 @@
+FROM postgres:latest
+ENV  PGUSER=postgres PGHOST=postgres PGDATABASE=postgres PGPASSWORD=postgres_password PGPORT=5432
+EXPOSE 5432:5432
