@@ -26,7 +26,7 @@ __decorate([
     __metadata("design:type", String)
 ], UserRole.prototype, "description", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)("text", { array: true, nullable: true }),
     __metadata("design:type", Array)
 ], UserRole.prototype, "forbiddenRoutes", void 0);
 UserRole = __decorate([

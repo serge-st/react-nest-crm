@@ -1,34 +1,37 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserRole } from "./userRole.entity";
 
-@Entity()
+@Entity('users')
+@Index(['username'], { unique: true })
 export class User {
     @PrimaryGeneratedColumn('increment')
-    id: string;
+    id: number;
 
     @Column({
         length: 20,
-        nullable: false,
     })
     username: string;
 
     @Column({
-        nullable: false,
     })
     password: string;
     
-    @ManyToOne(() => UserRole, (userRole) => userRole.id)
+    @ManyToOne(() => UserRole, (userRole) => userRole.id, {nullable: false})
+    @JoinColumn({name: 'roleId'})
     roleId: UserRole;
 
     @Column({
-        nullable: false,
         default: true,
     })
     isEnabled: boolean;
     
-    @Column()
+    @Column({
+        nullable: true,
+    })
     fullName: string;
     
-    @Column()
+    @Column({
+        nullable: true,
+    })
     email: string;
 }

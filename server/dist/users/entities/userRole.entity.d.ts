@@ -2,11 +2,11 @@ declare const UserRoles: {
     readonly admin: "Administrator";
     readonly manager: "Manager";
 };
-type UserId = keyof typeof UserRoles;
-type UserDescription = typeof UserRoles[UserId];
+export type UserRoleId = keyof typeof UserRoles;
+type UserRoleDescription = typeof UserRoles[UserRoleId];
 export declare class UserRole {
-    id: UserId;
-    description: UserDescription;
+    id: UserRoleId;
+    description: UserRoleDescription;
     forbiddenRoutes: string[];
 }
 export {};

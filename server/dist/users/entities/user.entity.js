@@ -16,42 +16,44 @@ let User = class User {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         length: 20,
-        nullable: false,
     }),
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        nullable: false,
-    }),
+    (0, typeorm_1.Column)({}),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => userRole_entity_1.UserRole, (userRole) => userRole.id),
+    (0, typeorm_1.ManyToOne)(() => userRole_entity_1.UserRole, (userRole) => userRole.id, { nullable: false }),
+    (0, typeorm_1.JoinColumn)({ name: 'roleId' }),
     __metadata("design:type", userRole_entity_1.UserRole)
 ], User.prototype, "roleId", void 0);
 __decorate([
     (0, typeorm_1.Column)({
-        nullable: false,
         default: true,
     }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isEnabled", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        nullable: true,
+    }),
     __metadata("design:type", String)
 ], User.prototype, "fullName", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({
+        nullable: true,
+    }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 User = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)('users'),
+    (0, typeorm_1.Index)(['username'], { unique: true })
 ], User);
 exports.User = User;
 //# sourceMappingURL=user.entity.js.map

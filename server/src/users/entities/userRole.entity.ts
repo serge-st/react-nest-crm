@@ -5,17 +5,17 @@ const UserRoles = {
     manager: 'Manager',
 } as const;
 
-type UserId = keyof typeof UserRoles;
-type UserDescription = typeof UserRoles[UserId];
+export type UserRoleId = keyof typeof UserRoles;
+type UserRoleDescription = typeof UserRoles[UserRoleId];
 
 @Entity()
 export class UserRole {
     @PrimaryColumn()
-    id: UserId;
+    id: UserRoleId;
 
     @Column()
-    description: UserDescription;
+    description: UserRoleDescription;
 
-    @Column()
+    @Column("text", { array: true, nullable: true })
     forbiddenRoutes: string[];
 }
