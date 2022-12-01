@@ -31,6 +31,9 @@ let UsersController = class UsersController {
         return this.usersService.findOne(+id);
     }
     update(id, updateUserDto) {
+        if (updateUserDto['username'] || updateUserDto['id']) {
+            throw new common_1.BadRequestException(`Changing Username or ID is not allowed`);
+        }
         return this.usersService.update(+id, updateUserDto);
     }
     remove(id) {
@@ -63,7 +66,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),

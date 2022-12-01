@@ -9,9 +9,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserRole = void 0;
+exports.UserRole = exports.UserRoles = void 0;
 const typeorm_1 = require("typeorm");
-const UserRoles = {
+exports.UserRoles = {
     admin: 'Administrator',
     manager: 'Manager',
 };

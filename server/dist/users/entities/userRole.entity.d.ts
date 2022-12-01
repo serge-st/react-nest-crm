@@ -1,4 +1,4 @@
-declare const UserRoles: {
+export declare const UserRoles: {
     readonly admin: "Administrator";
     readonly manager: "Manager";
 };

@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
-const UserRoles = {
+export const UserRoles = {
     admin: 'Administrator',
     manager: 'Manager',
 } as const;
