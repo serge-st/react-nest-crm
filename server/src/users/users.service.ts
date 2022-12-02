@@ -6,6 +6,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UserRole } from './entities/userRole.entity';
 
+enum DBErrorCode {
+  duplicateName = '23505',
+}
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -40,8 +44,8 @@ export class UsersService {
       await this.usersRepository.save(newUser);
     } catch (error) {
         // '23505' is error code returned when username already exists in the DB
-        // because entity is decorated with @Index(['username'], { unique: true })
-        if (error.code === '23505') {
+        // because the password @Column decorator has { unique: true, } option
+        if (error.code === DBErrorCode.duplicateName) {
           throw new ConflictException(`Username '${username}' already exists`)
         } else {
           throw new InternalServerErrorException();

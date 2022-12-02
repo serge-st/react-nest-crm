@@ -29,6 +29,10 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./entities/user.entity");
 const userRole_entity_1 = require("./entities/userRole.entity");
+var DBErrorCode;
+(function (DBErrorCode) {
+    DBErrorCode["duplicateName"] = "23505";
+})(DBErrorCode || (DBErrorCode = {}));
 let UsersService = class UsersService {
     constructor(usersRepository, userRolesRepository) {
         this.usersRepository = usersRepository;
@@ -53,7 +57,7 @@ let UsersService = class UsersService {
             await this.usersRepository.save(newUser);
         }
         catch (error) {
-            if (error.code === '23505') {
+            if (error.code === DBErrorCode.duplicateName) {
                 throw new common_1.ConflictException(`Username '${username}' already exists`);
             }
             else {

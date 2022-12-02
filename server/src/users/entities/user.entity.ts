@@ -1,19 +1,18 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserRole } from "./userRole.entity";
 
 @Entity('users')
-@Index(['username'], { unique: true })
 export class User {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
     @Column({
-        length: 20,
+        length: 20, 
+        unique: true,
     })
     username: string;
 
-    @Column({
-    })
+    @Column()
     password: string;
     
     @ManyToOne(() => UserRole, (userRole) => userRole.id, {nullable: false})
