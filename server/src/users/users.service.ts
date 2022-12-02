@@ -2,9 +2,11 @@ import { ConflictException, Injectable, InternalServerErrorException, NotFoundEx
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { SuccessCreateUserDto } from './dto/success-create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UserRole } from './entities/userRole.entity';
+import passwordHasher from './helpers/passwordHasher';
 
 enum DBErrorCode {
   duplicateName = '23505',
@@ -26,15 +28,17 @@ export class UsersService {
     this.userRolesRepository.save(manager);
   }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<SuccessCreateUserDto> {
     const {username, password, roleId, isEnabled, fullName, email} = createUserDto;
+
+    const hashedPassword = await passwordHasher(4, password);
 
     const [role] = await this.userRolesRepository.find({where: {id: roleId}});
 
     const newUser = this.usersRepository.create({
-      username,
-      password,
+      password: hashedPassword,
       roleId: role,
+      username,
       isEnabled,
       fullName,
       email,
@@ -52,7 +56,10 @@ export class UsersService {
         }
     }
     
-    return newUser;
+    return {
+      id: newUser.id,
+      username: newUser.username,
+    };
   }
 
   async findAll(): Promise<User[]> {

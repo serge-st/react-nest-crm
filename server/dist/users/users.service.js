@@ -29,6 +29,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./entities/user.entity");
 const userRole_entity_1 = require("./entities/userRole.entity");
+const passwordHasher_1 = require("./helpers/passwordHasher");
 var DBErrorCode;
 (function (DBErrorCode) {
     DBErrorCode["duplicateName"] = "23505";
@@ -44,11 +45,12 @@ let UsersService = class UsersService {
     }
     async create(createUserDto) {
         const { username, password, roleId, isEnabled, fullName, email } = createUserDto;
+        const hashedPassword = await (0, passwordHasher_1.default)(4, password);
         const [role] = await this.userRolesRepository.find({ where: { id: roleId } });
         const newUser = this.usersRepository.create({
-            username,
-            password,
+            password: hashedPassword,
             roleId: role,
+            username,
             isEnabled,
             fullName,
             email,
@@ -64,7 +66,10 @@ let UsersService = class UsersService {
                 throw new common_1.InternalServerErrorException();
             }
         }
-        return newUser;
+        return {
+            id: newUser.id,
+            username: newUser.username,
+        };
     }
     async findAll() {
         return await this.usersRepository.find({ loadRelationIds: true });
