@@ -66,7 +66,7 @@ export class UsersService {
     return await this.usersRepository.find({loadRelationIds: true});
   }
 
-  async findOne(id: number): Promise<User> {
+  async findById(id: number): Promise<User> {
     const [user] = await this.usersRepository.find({loadRelationIds: true, where: {id: id}});
     if (!user) {
       throw new NotFoundException(`User with ID ${id} was not found`);
@@ -74,8 +74,13 @@ export class UsersService {
     return user;
   }
 
+  async findByUsername(username: string): Promise<User | null> {
+    const user = await this.usersRepository.findOneBy({ username });
+    return user;
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    const foundUser = await this.findOne(id);
+    const foundUser = await this.findById(id);
 
     if (updateUserDto.roleId) {
       const [role] = await this.userRolesRepository.find({where: {id: updateUserDto.roleId}});

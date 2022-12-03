@@ -27,8 +27,8 @@ let UsersController = class UsersController {
     findAll() {
         return this.usersService.findAll();
     }
-    findOne(id) {
-        return this.usersService.findOne(+id);
+    findById(id) {
+        return this.usersService.findById(+id);
     }
     update(id, updateUserDto) {
         if (updateUserDto['username'] || updateUserDto['id']) {
@@ -59,7 +59,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "findOne", null);
+], UsersController.prototype, "findById", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),

@@ -74,15 +74,19 @@ let UsersService = class UsersService {
     async findAll() {
         return await this.usersRepository.find({ loadRelationIds: true });
     }
-    async findOne(id) {
+    async findById(id) {
         const [user] = await this.usersRepository.find({ loadRelationIds: true, where: { id: id } });
         if (!user) {
             throw new common_1.NotFoundException(`User with ID ${id} was not found`);
         }
         return user;
     }
+    async findByUsername(username) {
+        const user = await this.usersRepository.findOneBy({ username });
+        return user;
+    }
     async update(id, updateUserDto) {
-        const foundUser = await this.findOne(id);
+        const foundUser = await this.findById(id);
         if (updateUserDto.roleId) {
             const [role] = await this.userRolesRepository.find({ where: { id: updateUserDto.roleId } });
             foundUser.roleId = role;

@@ -13,3 +13,4 @@
 13. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
 14. [ ] Add protection to the routes.
 15. [ ] Create a simple FE to test auth and protected routes.
+16. [ ] Add MinLenght(2) to create-user.dto.ts for username property
