@@ -20,15 +20,19 @@ AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot(),
-            typeorm_1.TypeOrmModule.forRoot({
-                type: 'postgres',
-                host: process.env.DB_HOST,
-                port: +process.env.DB_PORT,
-                username: process.env.DB_USERNAME,
-                password: process.env.DB_PASSWORD,
-                database: process.env.DB_NAME,
-                autoLoadEntities: true,
-                synchronize: true,
+            typeorm_1.TypeOrmModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async () => ({
+                    type: 'postgres',
+                    host: process.env.DB_HOST,
+                    port: +process.env.DB_PORT,
+                    username: process.env.DB_USERNAME,
+                    password: process.env.DB_PASSWORD,
+                    database: process.env.DB_NAME,
+                    autoLoadEntities: true,
+                    synchronize: true,
+                }),
             }),
             users_module_1.UsersModule,
             auth_module_1.AuthModule,

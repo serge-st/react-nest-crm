@@ -13,9 +13,11 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("../users/users.service");
 const bcrypt = require("bcrypt");
+const jwt_1 = require("@nestjs/jwt");
 let AuthService = class AuthService {
-    constructor(usersService) {
+    constructor(usersService, jwtService) {
         this.usersService = usersService;
+        this.jwtService = jwtService;
     }
     async signIn(authCredentialsDto) {
         const { username, password } = authCredentialsDto;
@@ -27,7 +29,7 @@ let AuthService = class AuthService {
         if (user && (await bcrypt.compare(password, user.password))) {
             const payload = { username: user.username, role: user.roleId };
             return {
-                access_token: 'asdfasdf'
+                access_token: this.jwtService.sign(payload)
             };
         }
         else {
@@ -37,7 +39,8 @@ let AuthService = class AuthService {
 };
 AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
+    __metadata("design:paramtypes", [users_service_1.UsersService,
+        jwt_1.JwtService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map

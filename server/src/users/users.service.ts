@@ -67,7 +67,7 @@ export class UsersService {
   }
 
   async findById(id: number): Promise<User> {
-    const [user] = await this.usersRepository.find({loadRelationIds: true, where: {id: id}});
+    const [user] = await this.usersRepository.find({loadRelationIds: true, where: { id }});
     if (!user) {
       throw new NotFoundException(`User with ID ${id} was not found`);
     }
@@ -75,7 +75,7 @@ export class UsersService {
   }
 
   async findByUsername(username: string): Promise<User | null> {
-    const user = await this.usersRepository.findOneBy({ username });
+    const [user] = await this.usersRepository.find({loadRelationIds: true, where: { username }});
     return user;
   }
 
