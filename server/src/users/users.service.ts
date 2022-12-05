@@ -3,8 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { SuccessCreateUserDto } from './dto/success-create-user.dto';
-import { SuccessUpdateUserDto } from './dto/success-update-user.dto';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -33,7 +31,7 @@ export class UsersService {
     this.userRolesRepository.save(manager);
   }
 
-  async create(createUserDto: CreateUserDto): Promise<SuccessCreateUserDto> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const {username, password, roleId, isEnabled, fullName, email} = createUserDto;
 
     const hashedPassword = await passwordHasher(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
@@ -61,10 +59,7 @@ export class UsersService {
         }
     }
     
-    return {
-      id: newUser.id,
-      username: newUser.username,
-    };
+    return newUser;
   }
 
   async findAll(): Promise<User[]> {
@@ -94,30 +89,28 @@ export class UsersService {
 
     const {roleId, ...restUpdatedValues} = updateUserDto;
 
-    const updatedUser = {
+    const updatedUser = this.usersRepository.create({
       ...foundUser,
       ...restUpdatedValues,
-    }
+    });
 
     await this.usersRepository.save(updatedUser);
-
     return updatedUser;
   }
 
-  async updatePassword(id: number, updateUserPasswordDto: UpdateUserPasswordDto): Promise<SuccessUpdateUserDto> {
+  async updatePassword(id: number, updateUserPasswordDto: UpdateUserPasswordDto): Promise<User> {
     const foundUser = await this.findById(id);
     const {password} = updateUserPasswordDto;
 
     const hashedPassword = await passwordHasher(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
 
-    const updatedUser = {
+    const updatedUser = this.usersRepository.create({
       ...foundUser,
       password: hashedPassword,
-    }
+    });
 
-    const result = await this.usersRepository.save(updatedUser);
-    const {password: pwd, ...updateResult} = result;
-    return updateResult;
+    await this.usersRepository.save(updatedUser);
+    return updatedUser;
   }
 
   async remove(id: number): Promise<void> {

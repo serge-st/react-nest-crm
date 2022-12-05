@@ -13,12 +13,12 @@
 13. [x] Create type interface for JwtPayload.
 14. [x] Create type interface for SingIn return type (used in both auth.service and auth.controller)
 15. [x] Add MinLenght(2) to create-user.dto.ts for username property
-16. [ ] !!! Create a decorator to remove passwords from query results.
-17. [ ] Protect all routes except login
-18. [ ] Give access to /users route only for 'admin' user type.
-19. [ ] Restrict password update in @Patch(':id') method
-20. [ ] Delete passwords from getAll method (check if any other find method returns passwords)
-21. [ ] Create a separate route for password update
-22. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
-23. [ ] Create a simple FE to test auth and protected routes.
-24. [ ] Restrict isEnabled=false users in signIn service.
+16. [x] Create a decorator to remove passwords from query results -> To hide fields use @Exclude() decorator on a property and @UseInterceptors(ClassSerializerInterceptor) decorator on a route.
+17. [x] Restrict isEnabled=false users in signIn service.
+18. [x] Restrict password update in @Patch(':id') method
+19. [x] Delete passwords from getAll method (check if any other find method returns passwords)
+20. [x] Create a separate route for password update
+21. [ ] Protect all routes except login
+22. [ ] Give access to /users route only for 'admin' user type.
+23. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
+24. [ ] Create a simple FE to test auth and protected routes.

@@ -1,20 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, BadRequestException, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, BadRequestException, UseGuards, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { SuccessCreateUserDto } from './dto/success-create-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
-import { SuccessUpdateUserDto } from './dto/success-update-user.dto';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 @UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto): Promise<SuccessCreateUserDto> {
+  create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
 
@@ -39,7 +38,7 @@ export class UsersController {
   }
 
   @Patch('/change-password/:id')
-  updatePassword(@Param('id') id: string, @Body() updateUserPasswordDto: UpdateUserPasswordDto): Promise<SuccessUpdateUserDto> {
+  updatePassword(@Param('id') id: string, @Body() updateUserPasswordDto: UpdateUserPasswordDto): Promise<User> {
     return this.usersService.updatePassword(+id, updateUserPasswordDto);
   }
 

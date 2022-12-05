@@ -68,10 +68,7 @@ let UsersService = class UsersService {
                 throw new common_1.InternalServerErrorException();
             }
         }
-        return {
-            id: newUser.id,
-            username: newUser.username,
-        };
+        return newUser;
     }
     async findAll() {
         return await this.usersRepository.find({ loadRelationIds: true });
@@ -94,7 +91,7 @@ let UsersService = class UsersService {
             foundUser.roleId = role;
         }
         const { roleId } = updateUserDto, restUpdatedValues = __rest(updateUserDto, ["roleId"]);
-        const updatedUser = Object.assign(Object.assign({}, foundUser), restUpdatedValues);
+        const updatedUser = this.usersRepository.create(Object.assign(Object.assign({}, foundUser), restUpdatedValues));
         await this.usersRepository.save(updatedUser);
         return updatedUser;
     }
@@ -102,10 +99,9 @@ let UsersService = class UsersService {
         const foundUser = await this.findById(id);
         const { password } = updateUserPasswordDto;
         const hashedPassword = await (0, passwordHasher_1.default)(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
-        const updatedUser = Object.assign(Object.assign({}, foundUser), { password: hashedPassword });
-        const result = await this.usersRepository.save(updatedUser);
-        const { password: pwd } = result, updateResult = __rest(result, ["password"]);
-        return updateResult;
+        const updatedUser = this.usersRepository.create(Object.assign(Object.assign({}, foundUser), { password: hashedPassword }));
+        await this.usersRepository.save(updatedUser);
+        return updatedUser;
     }
     async remove(id) {
         const result = await this.usersRepository.delete(id);

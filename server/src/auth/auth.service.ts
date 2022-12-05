@@ -25,7 +25,7 @@ export class AuthService {
 
         const user = await this.usersService.findByUsername(username);
         
-        if (user && (await bcrypt.compare(password, user.password))) {
+        if (user && user.isEnabled && (await bcrypt.compare(password, user.password))) {
             const payload: JwtPayload = { username: user.username, role: user.roleId};
             return {
                 access_token: this.jwtService.sign(payload)
