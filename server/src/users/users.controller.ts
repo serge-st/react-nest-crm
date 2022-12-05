@@ -5,6 +5,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { SuccessCreateUserDto } from './dto/success-create-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
+import { SuccessUpdateUserDto } from './dto/success-update-user.dto';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -28,10 +30,17 @@ export class UsersController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User> {
-    if (updateUserDto['username'] || updateUserDto['id']) {
+    if (updateUserDto['password']) {
+      throw new BadRequestException(`To change password use '/users/change-password/:id' endpoint`)
+    } else if (updateUserDto['username'] || updateUserDto['id']) {
       throw new BadRequestException(`Changing Username or ID is not allowed`)
     }
     return this.usersService.update(+id, updateUserDto);
+  }
+
+  @Patch('/change-password/:id')
+  updatePassword(@Param('id') id: string, @Body() updateUserPasswordDto: UpdateUserPasswordDto): Promise<SuccessUpdateUserDto> {
+    return this.usersService.updatePassword(+id, updateUserPasswordDto);
   }
 
   @Delete(':id')

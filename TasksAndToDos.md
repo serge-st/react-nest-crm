@@ -12,11 +12,13 @@
 12. [x] Include user role information into JWT.
 13. [x] Create type interface for JwtPayload.
 14. [x] Create type interface for SingIn return type (used in both auth.service and auth.controller)
-15. [ ] Protect all routes except login
-16. [ ] Give access to /users route only for 'admin' user type.
-17. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
-18. [ ] Create a simple FE to test auth and protected routes.
-19. [ ] Add MinLenght(2) to create-user.dto.ts for username property
+15. [x] Add MinLenght(2) to create-user.dto.ts for username property
+16. [ ] !!! Create a decorator to remove passwords from query results.
+17. [ ] Protect all routes except login
+18. [ ] Give access to /users route only for 'admin' user type.
+19. [ ] Restrict password update in @Patch(':id') method
 20. [ ] Delete passwords from getAll method (check if any other find method returns passwords)
-21. [ ] Restrict password update in @Patch(':id') method
-22. [ ] Create a separate route for password update
+21. [ ] Create a separate route for password update
+22. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
+23. [ ] Create a simple FE to test auth and protected routes.
+24. [ ] Restrict isEnabled=false users in signIn service.

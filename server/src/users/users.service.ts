@@ -1,8 +1,11 @@
 import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { SuccessCreateUserDto } from './dto/success-create-user.dto';
+import { SuccessUpdateUserDto } from './dto/success-update-user.dto';
+import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UserRole } from './entities/userRole.entity';
@@ -15,6 +18,8 @@ enum DBErrorCode {
 @Injectable()
 export class UsersService {
   constructor(
+    private configService: ConfigService,
+
     @InjectRepository(User)
     private usersRepository: Repository<User>,
 
@@ -31,7 +36,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<SuccessCreateUserDto> {
     const {username, password, roleId, isEnabled, fullName, email} = createUserDto;
 
-    const hashedPassword = await passwordHasher(4, password);
+    const hashedPassword = await passwordHasher(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
 
     const [role] = await this.userRolesRepository.find({where: {id: roleId}});
 
@@ -94,9 +99,25 @@ export class UsersService {
       ...restUpdatedValues,
     }
 
-    this.usersRepository.save(updatedUser);
+    await this.usersRepository.save(updatedUser);
 
     return updatedUser;
+  }
+
+  async updatePassword(id: number, updateUserPasswordDto: UpdateUserPasswordDto): Promise<SuccessUpdateUserDto> {
+    const foundUser = await this.findById(id);
+    const {password} = updateUserPasswordDto;
+
+    const hashedPassword = await passwordHasher(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
+
+    const updatedUser = {
+      ...foundUser,
+      password: hashedPassword,
+    }
+
+    const result = await this.usersRepository.save(updatedUser);
+    const {password: pwd, ...updateResult} = result;
+    return updateResult;
   }
 
   async remove(id: number): Promise<void> {

@@ -18,6 +18,7 @@ const users_service_1 = require("./users.service");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const update_user_password_dto_1 = require("./dto/update-user-password.dto");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -32,10 +33,16 @@ let UsersController = class UsersController {
         return this.usersService.findById(+id);
     }
     update(id, updateUserDto) {
-        if (updateUserDto['username'] || updateUserDto['id']) {
+        if (updateUserDto['password']) {
+            throw new common_1.BadRequestException(`To change password use '/users/change-password/:id' endpoint`);
+        }
+        else if (updateUserDto['username'] || updateUserDto['id']) {
             throw new common_1.BadRequestException(`Changing Username or ID is not allowed`);
         }
         return this.usersService.update(+id, updateUserDto);
+    }
+    updatePassword(id, updateUserPasswordDto) {
+        return this.usersService.updatePassword(+id, updateUserPasswordDto);
     }
     remove(id) {
         return this.usersService.remove(+id);
@@ -69,6 +76,14 @@ __decorate([
     __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
+__decorate([
+    (0, common_1.Patch)('/change-password/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_user_password_dto_1.UpdateUserPasswordDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "updatePassword", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.HttpCode)(204),

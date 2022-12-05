@@ -25,6 +25,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./entities/user.entity");
@@ -35,7 +36,8 @@ var DBErrorCode;
     DBErrorCode["duplicateName"] = "23505";
 })(DBErrorCode || (DBErrorCode = {}));
 let UsersService = class UsersService {
-    constructor(usersRepository, userRolesRepository) {
+    constructor(configService, usersRepository, userRolesRepository) {
+        this.configService = configService;
         this.usersRepository = usersRepository;
         this.userRolesRepository = userRolesRepository;
         const admin = this.userRolesRepository.create({ id: 'admin', description: 'Administrator', forbiddenRoutes: [] });
@@ -45,7 +47,7 @@ let UsersService = class UsersService {
     }
     async create(createUserDto) {
         const { username, password, roleId, isEnabled, fullName, email } = createUserDto;
-        const hashedPassword = await (0, passwordHasher_1.default)(4, password);
+        const hashedPassword = await (0, passwordHasher_1.default)(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
         const [role] = await this.userRolesRepository.find({ where: { id: roleId } });
         const newUser = this.usersRepository.create({
             password: hashedPassword,
@@ -93,8 +95,17 @@ let UsersService = class UsersService {
         }
         const { roleId } = updateUserDto, restUpdatedValues = __rest(updateUserDto, ["roleId"]);
         const updatedUser = Object.assign(Object.assign({}, foundUser), restUpdatedValues);
-        this.usersRepository.save(updatedUser);
+        await this.usersRepository.save(updatedUser);
         return updatedUser;
+    }
+    async updatePassword(id, updateUserPasswordDto) {
+        const foundUser = await this.findById(id);
+        const { password } = updateUserPasswordDto;
+        const hashedPassword = await (0, passwordHasher_1.default)(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
+        const updatedUser = Object.assign(Object.assign({}, foundUser), { password: hashedPassword });
+        const result = await this.usersRepository.save(updatedUser);
+        const { password: pwd } = result, updateResult = __rest(result, ["password"]);
+        return updateResult;
     }
     async remove(id) {
         const result = await this.usersRepository.delete(id);
@@ -105,9 +116,10 @@ let UsersService = class UsersService {
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __param(1, (0, typeorm_1.InjectRepository)(userRole_entity_1.UserRole)),
-    __metadata("design:paramtypes", [typeorm_2.Repository,
+    __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __param(2, (0, typeorm_1.InjectRepository)(userRole_entity_1.UserRole)),
+    __metadata("design:paramtypes", [config_1.ConfigService,
+        typeorm_2.Repository,
         typeorm_2.Repository])
 ], UsersService);
 exports.UsersService = UsersService;
