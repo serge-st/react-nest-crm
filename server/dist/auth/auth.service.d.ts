@@ -3,5 +3,7 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 export declare class AuthService {
     private usersService;
     constructor(usersService: UsersService);
-    signIn(authCredentialsDto: AuthCredentialsDto): Promise<string>;
+    signIn(authCredentialsDto: AuthCredentialsDto): Promise<{
+        access_token: string;
+    }>;
 }

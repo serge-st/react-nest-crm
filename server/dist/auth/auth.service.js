@@ -19,9 +19,16 @@ let AuthService = class AuthService {
     }
     async signIn(authCredentialsDto) {
         const { username, password } = authCredentialsDto;
+        const usernameValidation = /^(?=.*$)(?![_])[a-zA-Z0-9_]+(?<![_])$/;
+        if (!usernameValidation.test(username)) {
+            throw new common_1.UnauthorizedException('Please check you login credentials');
+        }
         const user = await this.usersService.findByUsername(username);
         if (user && (await bcrypt.compare(password, user.password))) {
-            return 'success';
+            const payload = { username: user.username, role: user.roleId };
+            return {
+                access_token: 'asdfasdf'
+            };
         }
         else {
             throw new common_1.UnauthorizedException('Please check you login credentials');

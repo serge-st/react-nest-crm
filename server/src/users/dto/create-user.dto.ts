@@ -2,9 +2,11 @@ import { UserRoleId, UserRoles } from "../entities/userRole.entity";
 import { IsNotEmpty, IsIn, IsBoolean, IsString, IsEmail, IsOptional, Matches, Length } from 'class-validator';
 
 export class CreateUserDto {
-    @IsNotEmpty()
     @IsString()
     @Length(2, 20)
+    @Matches(/^(?=.*$)(?![_])[a-zA-Z0-9_]+(?<![_])$/, {
+        message: `Username can only contain numbers, letters and underscores in the middle`
+    })
     username: string;
 
     @IsString()

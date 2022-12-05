@@ -15,9 +15,11 @@ const class_validator_1 = require("class-validator");
 class CreateUserDto {
 }
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.Length)(2, 20),
+    (0, class_validator_1.Matches)(/^(?=.*$)(?![_])[a-zA-Z0-9_]+(?<![_])$/, {
+        message: `Username can only contain numbers, letters and underscores in the middle`
+    }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "username", void 0);
 __decorate([
