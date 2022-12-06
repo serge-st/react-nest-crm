@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUserDto = void 0;
-const userRole_entity_1 = require("../entities/userRole.entity");
+const role_entity_1 = require("../../roles/entities/role.entity");
 const class_validator_1 = require("class-validator");
 class CreateUserDto {
 }
@@ -32,7 +32,7 @@ __decorate([
 ], CreateUserDto.prototype, "password", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsIn)(Object.keys(userRole_entity_1.UserRoles)),
+    (0, class_validator_1.IsIn)(Object.keys(role_entity_1.Roles)),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "role", void 0);
 __decorate([

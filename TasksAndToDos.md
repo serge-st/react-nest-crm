@@ -17,6 +17,7 @@
 17. [x] Create a separate route for password update
 18. [x] Add eager=true to User -> UserRole relation, so that every time the relation table loads.
 19. [x] Protect all routes except login
-20. [ ] Give access to /users route only for 'admin' user type.
-21. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
-22. [ ] Create a simple FE to test auth and protected routes.
+20. [x] Add collection variable in Postman for User CRUD
+21. [ ] Give access to /users route only for 'admin' user type.
+22. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
+23. [ ] Create a simple FE to test auth and protected routes.

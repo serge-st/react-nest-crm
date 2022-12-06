@@ -4,12 +4,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { UserRole } from './entities/userRole.entity';
+import { RolesService } from 'src/roles/roles.service';
 export declare class UsersService {
-    private configService;
     private usersRepository;
-    private userRolesRepository;
-    constructor(configService: ConfigService, usersRepository: Repository<User>, userRolesRepository: Repository<UserRole>);
+    private configService;
+    private rolesService;
+    constructor(usersRepository: Repository<User>, configService: ConfigService, rolesService: RolesService);
     create(createUserDto: CreateUserDto): Promise<User>;
     findAll(): Promise<User[]>;
     findById(id: number): Promise<User>;

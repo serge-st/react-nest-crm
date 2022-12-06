@@ -6,29 +6,31 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { UserRole } from './entities/userRole.entity';
 import passwordHasher from './helpers/passwordHasher';
-
-enum DBErrorCode {
-  duplicateName = '23505',
-}
+import { RolesService } from 'src/roles/roles.service';
+import { DbErrorCode } from 'src/db-error-code.enum';
 
 @Injectable()
 export class UsersService {
   constructor(
-    private configService: ConfigService,
-
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    
+    private configService: ConfigService,
 
-    @InjectRepository(UserRole)
-    private userRolesRepository: Repository<UserRole>
+    private rolesService: RolesService,
   ) {
-    // Prefill table with roles
-    const admin = this.userRolesRepository.create({id: 'admin', description: 'Administrator', forbiddenRoutes: []});
-    const manager = this.userRolesRepository.create({id: 'manager', description: 'Manager', forbiddenRoutes: ['/users']});
-    this.userRolesRepository.save(admin);
-    this.userRolesRepository.save(manager);
+    // Prefill table with test users:
+    const prefil = async () => {
+      const testUser = await this.usersRepository.findOne({where: {username: 'admin'}});
+      if (!testUser) {
+        const role = await this.rolesService.findOne('admin');
+        const password = await passwordHasher(4, 'Testing1');
+        const admin = this.usersRepository.create({username: 'admin', password, role})
+        await this.usersRepository.save(admin);
+      }
+    }
+    prefil();
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -36,7 +38,7 @@ export class UsersService {
 
     const hashedPassword = await passwordHasher(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
 
-    const [role] = await this.userRolesRepository.find({where: {id: roleId}});
+    const role = await this.rolesService.findOne(roleId);
 
     const newUser = this.usersRepository.create({
       password: hashedPassword,
@@ -52,7 +54,7 @@ export class UsersService {
     } catch (error) {
         // '23505' is error code returned when username already exists in the DB
         // because the password @Column decorator has { unique: true, } option
-        if (error.code === DBErrorCode.duplicateName) {
+        if (error.code === DbErrorCode.duplicateName) {
           throw new ConflictException(`Username '${username}' already exists`)
         } else {
           throw new InternalServerErrorException();
@@ -83,7 +85,7 @@ export class UsersService {
     const foundUser = await this.findById(id);
 
     if (updateUserDto.role) {
-      const [role] = await this.userRolesRepository.find({where: {id: updateUserDto.role}});
+      const role = await this.rolesService.findOne(updateUserDto.role);
       foundUser.role = role;
     }
 

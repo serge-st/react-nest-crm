@@ -9,24 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserRole = exports.UserRoles = void 0;
+exports.Role = exports.Roles = void 0;
 const typeorm_1 = require("typeorm");
-exports.UserRoles = {
+exports.Roles = {
     admin: 'Administrator',
     manager: 'Manager',
 };
-let UserRole = class UserRole {
+let Role = class Role {
 };
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], UserRole.prototype, "id", void 0);
+], Role.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], UserRole.prototype, "description", void 0);
-UserRole = __decorate([
-    (0, typeorm_1.Entity)()
-], UserRole);
-exports.UserRole = UserRole;
-//# sourceMappingURL=userRole.entity.js.map
+], Role.prototype, "description", void 0);
+Role = __decorate([
+    (0, typeorm_1.Entity)('roles')
+], Role);
+exports.Role = Role;
+//# sourceMappingURL=role.entity.js.map

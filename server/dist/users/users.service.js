@@ -29,26 +29,29 @@ const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./entities/user.entity");
-const userRole_entity_1 = require("./entities/userRole.entity");
 const passwordHasher_1 = require("./helpers/passwordHasher");
-var DBErrorCode;
-(function (DBErrorCode) {
-    DBErrorCode["duplicateName"] = "23505";
-})(DBErrorCode || (DBErrorCode = {}));
+const roles_service_1 = require("../roles/roles.service");
+const db_error_code_enum_1 = require("../db-error-code.enum");
 let UsersService = class UsersService {
-    constructor(configService, usersRepository, userRolesRepository) {
-        this.configService = configService;
+    constructor(usersRepository, configService, rolesService) {
         this.usersRepository = usersRepository;
-        this.userRolesRepository = userRolesRepository;
-        const admin = this.userRolesRepository.create({ id: 'admin', description: 'Administrator', forbiddenRoutes: [] });
-        const manager = this.userRolesRepository.create({ id: 'manager', description: 'Manager', forbiddenRoutes: ['/users'] });
-        this.userRolesRepository.save(admin);
-        this.userRolesRepository.save(manager);
+        this.configService = configService;
+        this.rolesService = rolesService;
+        const prefil = async () => {
+            const testUser = await this.usersRepository.findOne({ where: { username: 'admin' } });
+            if (!testUser) {
+                const role = await this.rolesService.findOne('admin');
+                const password = await (0, passwordHasher_1.default)(4, 'Testing1');
+                const admin = this.usersRepository.create({ username: 'admin', password, role });
+                await this.usersRepository.save(admin);
+            }
+        };
+        prefil();
     }
     async create(createUserDto) {
         const { username, password, role: roleId, isEnabled, fullName, email } = createUserDto;
         const hashedPassword = await (0, passwordHasher_1.default)(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
-        const [role] = await this.userRolesRepository.find({ where: { id: roleId } });
+        const role = await this.rolesService.findOne(roleId);
         const newUser = this.usersRepository.create({
             password: hashedPassword,
             role,
@@ -61,7 +64,7 @@ let UsersService = class UsersService {
             await this.usersRepository.save(newUser);
         }
         catch (error) {
-            if (error.code === DBErrorCode.duplicateName) {
+            if (error.code === db_error_code_enum_1.DbErrorCode.duplicateName) {
                 throw new common_1.ConflictException(`Username '${username}' already exists`);
             }
             else {
@@ -87,7 +90,7 @@ let UsersService = class UsersService {
     async update(id, updateUserDto) {
         const foundUser = await this.findById(id);
         if (updateUserDto.role) {
-            const [role] = await this.userRolesRepository.find({ where: { id: updateUserDto.role } });
+            const role = await this.rolesService.findOne(updateUserDto.role);
             foundUser.role = role;
         }
         const { role: roleId } = updateUserDto, restUpdatedValues = __rest(updateUserDto, ["role"]);
@@ -112,11 +115,10 @@ let UsersService = class UsersService {
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),
-    __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __param(2, (0, typeorm_1.InjectRepository)(userRole_entity_1.UserRole)),
-    __metadata("design:paramtypes", [config_1.ConfigService,
-        typeorm_2.Repository,
-        typeorm_2.Repository])
+    __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        config_1.ConfigService,
+        roles_service_1.RolesService])
 ], UsersService);
 exports.UsersService = UsersService;
 //# sourceMappingURL=users.service.js.map

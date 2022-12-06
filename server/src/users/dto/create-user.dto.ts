@@ -1,4 +1,4 @@
-import { UserRoleId, UserRoles } from "../entities/userRole.entity";
+import { RoleId, Roles } from "../../roles/entities/role.entity";
 import { IsNotEmpty, IsIn, IsBoolean, IsString, IsEmail, IsOptional, Matches, Length } from 'class-validator';
 
 export class CreateUserDto {
@@ -18,8 +18,8 @@ export class CreateUserDto {
     password: string;
 
     @IsNotEmpty()
-    @IsIn(Object.keys(UserRoles))
-    role: UserRoleId;
+    @IsIn(Object.keys(Roles))
+    role: RoleId;
 
     @IsOptional()
     @IsBoolean()
