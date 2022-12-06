@@ -17,6 +17,7 @@ const auth_module_1 = require("./auth/auth.module");
 const core_1 = require("@nestjs/core");
 const jwt_auth_guard_1 = require("./auth/jwt-auth.guard");
 const roles_module_1 = require("./roles/roles.module");
+const approutes_module_1 = require("./approutes/approutes.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -40,6 +41,7 @@ AppModule = __decorate([
             users_module_1.UsersModule,
             auth_module_1.AuthModule,
             roles_module_1.RolesModule,
+            approutes_module_1.AppRoutesModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, {
