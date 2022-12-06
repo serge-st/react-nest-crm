@@ -7,7 +7,7 @@ export declare class JwtStrategy extends JwtStrategy_base {
     constructor(configService: ConfigService);
     validate(payload: JwtPayload): Promise<{
         username: string;
-        role: import("../users/entities/userRole.entity").UserRole;
+        role: "admin" | "manager";
     }>;
 }
 export {};

@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
-const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const update_user_password_dto_1 = require("./dto/update-user-password.dto");
 let UsersController = class UsersController {
     constructor(usersService) {
@@ -95,7 +94,6 @@ __decorate([
 UsersController = __decorate([
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, common_1.Controller)('users'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);
 exports.UsersController = UsersController;
