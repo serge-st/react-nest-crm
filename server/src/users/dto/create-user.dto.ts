@@ -19,7 +19,7 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @IsIn(Object.keys(UserRoles))
-    roleId: UserRoleId;
+    role: UserRoleId;
 
     @IsOptional()
     @IsBoolean()

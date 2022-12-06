@@ -32,10 +32,10 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => userRole_entity_1.UserRole, (userRole) => userRole.id, { nullable: false }),
-    (0, typeorm_1.JoinColumn)({ name: 'roleId' }),
+    (0, typeorm_1.ManyToOne)(() => userRole_entity_1.UserRole, (userRole) => userRole.id, { nullable: false, eager: true }),
+    (0, typeorm_1.JoinColumn)({ name: 'role' }),
     __metadata("design:type", userRole_entity_1.UserRole)
-], User.prototype, "roleId", void 0);
+], User.prototype, "role", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         default: true,

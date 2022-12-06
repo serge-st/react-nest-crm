@@ -46,12 +46,12 @@ let UsersService = class UsersService {
         this.userRolesRepository.save(manager);
     }
     async create(createUserDto) {
-        const { username, password, roleId, isEnabled, fullName, email } = createUserDto;
+        const { username, password, role: roleId, isEnabled, fullName, email } = createUserDto;
         const hashedPassword = await (0, passwordHasher_1.default)(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
         const [role] = await this.userRolesRepository.find({ where: { id: roleId } });
         const newUser = this.usersRepository.create({
             password: hashedPassword,
-            roleId: role,
+            role,
             username,
             isEnabled,
             fullName,
@@ -71,26 +71,26 @@ let UsersService = class UsersService {
         return newUser;
     }
     async findAll() {
-        return await this.usersRepository.find({ loadRelationIds: true });
+        return await this.usersRepository.find();
     }
     async findById(id) {
-        const [user] = await this.usersRepository.find({ loadRelationIds: true, where: { id } });
+        const [user] = await this.usersRepository.find({ where: { id } });
         if (!user) {
             throw new common_1.NotFoundException(`User with ID ${id} was not found`);
         }
         return user;
     }
     async findByUsername(username) {
-        const [user] = await this.usersRepository.find({ loadRelationIds: true, where: { username } });
+        const [user] = await this.usersRepository.find({ where: { username } });
         return user;
     }
     async update(id, updateUserDto) {
         const foundUser = await this.findById(id);
-        if (updateUserDto.roleId) {
-            const [role] = await this.userRolesRepository.find({ where: { id: updateUserDto.roleId } });
-            foundUser.roleId = role;
+        if (updateUserDto.role) {
+            const [role] = await this.userRolesRepository.find({ where: { id: updateUserDto.role } });
+            foundUser.role = role;
         }
-        const { roleId } = updateUserDto, restUpdatedValues = __rest(updateUserDto, ["roleId"]);
+        const { role: roleId } = updateUserDto, restUpdatedValues = __rest(updateUserDto, ["role"]);
         const updatedUser = this.usersRepository.create(Object.assign(Object.assign({}, foundUser), restUpdatedValues));
         await this.usersRepository.save(updatedUser);
         return updatedUser;

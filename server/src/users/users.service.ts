@@ -32,7 +32,7 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const {username, password, roleId, isEnabled, fullName, email} = createUserDto;
+    const {username, password, role: roleId, isEnabled, fullName, email} = createUserDto;
 
     const hashedPassword = await passwordHasher(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
 
@@ -40,7 +40,7 @@ export class UsersService {
 
     const newUser = this.usersRepository.create({
       password: hashedPassword,
-      roleId: role,
+      role,
       username,
       isEnabled,
       fullName,
@@ -63,11 +63,11 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    return await this.usersRepository.find({loadRelationIds: true});
+    return await this.usersRepository.find();
   }
 
   async findById(id: number): Promise<User> {
-    const [user] = await this.usersRepository.find({loadRelationIds: true, where: { id }});
+    const [user] = await this.usersRepository.find({ where: { id } });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} was not found`);
     }
@@ -75,19 +75,19 @@ export class UsersService {
   }
 
   async findByUsername(username: string): Promise<User | null> {
-    const [user] = await this.usersRepository.find({loadRelationIds: true, where: { username }});
+    const [user] = await this.usersRepository.find({ where: { username } });
     return user;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const foundUser = await this.findById(id);
 
-    if (updateUserDto.roleId) {
-      const [role] = await this.userRolesRepository.find({where: {id: updateUserDto.roleId}});
-      foundUser.roleId = role;
+    if (updateUserDto.role) {
+      const [role] = await this.userRolesRepository.find({where: {id: updateUserDto.role}});
+      foundUser.role = role;
     }
 
-    const {roleId, ...restUpdatedValues} = updateUserDto;
+    const {role: roleId, ...restUpdatedValues} = updateUserDto;
 
     const updatedUser = this.usersRepository.create({
       ...foundUser,

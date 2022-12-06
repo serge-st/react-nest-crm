@@ -17,9 +17,9 @@ export class User {
     @Exclude()
     password: string;
     
-    @ManyToOne(() => UserRole, (userRole) => userRole.id, {nullable: false})
-    @JoinColumn({name: 'roleId'})
-    roleId: UserRole;
+    @ManyToOne(() => UserRole, (userRole) => userRole.id, {nullable: false, eager: true})
+    @JoinColumn({name: 'role'})
+    role: UserRole;
 
     @Column({
         default: true,

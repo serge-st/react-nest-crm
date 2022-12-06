@@ -3,7 +3,7 @@ export declare class User {
     id: number;
     username: string;
     password: string;
-    roleId: UserRole;
+    role: UserRole;
     isEnabled: boolean;
     fullName: string;
     email: string;

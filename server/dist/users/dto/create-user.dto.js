@@ -34,7 +34,7 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsIn)(Object.keys(userRole_entity_1.UserRoles)),
     __metadata("design:type", String)
-], CreateUserDto.prototype, "roleId", void 0);
+], CreateUserDto.prototype, "role", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
