@@ -16,7 +16,7 @@
 16. [x] Restrict password update in @Patch(':id') method
 17. [x] Create a separate route for password update
 18. [x] Add eager=true to User -> UserRole relation, so that every time the relation table loads.
-19. [ ] Protect all routes except login
+19. [x] Protect all routes except login
 20. [ ] Give access to /users route only for 'admin' user type.
 21. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
 22. [ ] Create a simple FE to test auth and protected routes.
