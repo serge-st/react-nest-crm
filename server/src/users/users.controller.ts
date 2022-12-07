@@ -28,14 +28,14 @@ export class UsersController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User> {
     if (updateUserDto['password']) {
-      throw new BadRequestException(`To change password use '/users/change-password/:id' endpoint`)
+      throw new BadRequestException(`To change password use '/users/:id/password' endpoint`)
     } else if (updateUserDto['username'] || updateUserDto['id']) {
       throw new BadRequestException(`Changing Username or ID is not allowed`)
     }
     return this.usersService.update(+id, updateUserDto);
   }
 
-  @Patch('/change-password/:id')
+  @Patch('/:id/password')
   updatePassword(@Param('id') id: string, @Body() updateUserPasswordDto: UpdateUserPasswordDto): Promise<User> {
     return this.usersService.updatePassword(+id, updateUserPasswordDto);
   }

@@ -2,7 +2,7 @@ import { Controller, Get, Request } from "@nestjs/common";
 import { Request as ExpressRequest } from "express";
 import { AppRoutesService } from "./approutes.service";
 
-@Controller('routes')
+@Controller('approutes')
 export class AppRoutesController {
     constructor(private readonly appRoutesService: AppRoutesService) {}
 
