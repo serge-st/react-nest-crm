@@ -1,11 +1,18 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards, Request } from '@nestjs/common';
 import { AppService } from './app.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { Request as ExpressRequest } from "express";
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Get('approutes')
+  getAppRoutes(@Request() req: ExpressRequest): string[] {
+      return this.appService.getRoutes(req);
+  }
+
+  // !! Experimental stuff below:
   @Get()
   getHello(): string {
     return this.appService.getHello();
@@ -16,5 +23,10 @@ export class AppController {
   getHelloProtected(@Req() req): string {
     console.log(req)
     return this.appService.getHello();
+  }
+
+  @Get('/admin-only')
+  getAdminProtectRoute(): string {
+    return `Hello Admin!`
   }
 }

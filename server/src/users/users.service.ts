@@ -22,12 +22,17 @@ export class UsersService {
   ) {
     // Prefill table with test users:
     const prefil = async () => {
-      const testUser = await this.usersRepository.findOne({where: {username: 'admin'}});
+      const testUser = await this.usersRepository.findOne({where: {username: 'myadmin'}});
       if (!testUser) {
-        const role = await this.rolesService.findOne('admin');
-        const password = await passwordHasher(4, 'Testing1');
-        const admin = this.usersRepository.create({username: 'admin', password, role})
+        const roleA = await this.rolesService.findOne('admin');
+        const passwordA = await passwordHasher(4, 'Testing1');
+        const admin = this.usersRepository.create({username: 'myadmin', password: passwordA, role: roleA})
         await this.usersRepository.save(admin);
+
+        const roleM = await this.rolesService.findOne('manager');
+        const passwordM = await passwordHasher(4, 'Testing1');
+        const manager = this.usersRepository.create({username: 'mymanager', password: passwordM, role: roleM})
+        await this.usersRepository.save(manager);
       }
     }
     prefil();
