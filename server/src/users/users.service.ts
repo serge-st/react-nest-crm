@@ -39,19 +39,13 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const {username, password, role: roleId, isEnabled, fullName, email} = createUserDto;
-
+    const {password, role: roleId, username} = createUserDto;
     const hashedPassword = await passwordHasher(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
-
     const role = await this.rolesService.findOne(roleId);
-
     const newUser = this.usersRepository.create({
+      ...createUserDto,
       password: hashedPassword,
       role,
-      username,
-      isEnabled,
-      fullName,
-      email,
     });
 
     try {
@@ -65,7 +59,6 @@ export class UsersService {
           throw new InternalServerErrorException();
         }
     }
-    
     return newUser;
   }
 
@@ -95,12 +88,10 @@ export class UsersService {
     }
 
     const {role: roleId, ...restUpdatedValues} = updateUserDto;
-
     const updatedUser = this.usersRepository.create({
       ...foundUser,
       ...restUpdatedValues,
     });
-
     await this.usersRepository.save(updatedUser);
     return updatedUser;
   }
@@ -108,14 +99,12 @@ export class UsersService {
   async updatePassword(id: number, updateUserPasswordDto: UpdateUserPasswordDto): Promise<User> {
     const foundUser = await this.findById(id);
     const {password} = updateUserPasswordDto;
-
     const hashedPassword = await passwordHasher(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
 
     const updatedUser = this.usersRepository.create({
       ...foundUser,
       password: hashedPassword,
     });
-
     await this.usersRepository.save(updatedUser);
     return updatedUser;
   }
