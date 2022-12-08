@@ -14,6 +14,5 @@ import { SetMetadata } from '@nestjs/common';
 // SO, in this file we create a @Public() decorator
 // Which we can use to mark the publicly available routes/controllers.
 
-
 export const IS_PUBLIC_KEY = 'isPublic';
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);

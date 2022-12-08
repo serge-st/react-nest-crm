@@ -18,10 +18,15 @@
 18. [x] Add eager=true to User -> UserRole relation, so that every time the relation table loads.
 19. [x] Protect all routes except login
 20. [x] Add collection variable in Postman for User CRUD
-21. [ ] See how to setup user info in req.user
-22. [ ] Give access to /users route only for 'admin' user type.
-23. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
-24. [ ] Create a simple FE to test auth and protected routes.
-25. [ ] Think about a better way to implement user roles (maybe dynamic allowed/blocked routes).
-26. [x] MAYBE, implement API endpoint to get all endpoints, [link to description](https://stackoverflow.com/questions/58255000/how-can-i-get-all-the-routes-from-all-the-modules-and-controllers-available-on)
-27. [ ] and then it would be possible to get dynamic access for user roles? /routes endpoint
+21. [x] See how to setup user info in req.user
+22. [ ] Add forbiddenRoutes to Roles DB
+23. [ ] Store routes as tuples '[method, route]'
+24. [ ] Apply tuple route approach to /approutes
+25. [ ] Store the entire role object in JWT Token
+26. [ ] Compare users actual route with forbiddenRoutes array in Roles guard.
+27. [ ] Give access to /users route only for 'admin' user type.
+28. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
+29. [ ] Create a simple FE to test auth and protected routes.
+30. [ ] Think about a better way to implement user roles (maybe dynamic allowed/blocked routes).
+31. [x] MAYBE, implement API endpoint to get all endpoints, [link to description](https://stackoverflow.com/questions/58255000/how-can-i-get-all-the-routes-from-all-the-modules-and-controllers-available-on)
+32. [ ] and then it would be possible to get dynamic access for user roles? /routes endpoint
