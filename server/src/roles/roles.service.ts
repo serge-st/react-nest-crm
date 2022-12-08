@@ -10,10 +10,16 @@ export class RolesService {
         private rolesRepository: Repository<Role>
     ) {
         // Prefil tables with values:
-        const admin = this.rolesRepository.create({id: 'admin', description: 'Administrator'});
-        const manager = this.rolesRepository.create({id: 'manager', description: 'Manager'});
-        this.rolesRepository.save(admin);
-        this.rolesRepository.save(manager);
+        const prefil = async () => {
+            const testRole = await this.rolesRepository.findOne({where: {id: 'admin'}});
+            if (!testRole) {
+                const admin = this.rolesRepository.create({id: 'admin', description: 'Administrator', forbiddenRoutes: []});
+                const manager = this.rolesRepository.create({id: 'manager', description: 'Manager', forbiddenRoutes: ['* /users']});
+                await this.rolesRepository.save(admin);
+                await this.rolesRepository.save(manager);
+            }
+        }
+        prefil()
     }
 
     async findOne(id: RoleId): Promise<Role> {

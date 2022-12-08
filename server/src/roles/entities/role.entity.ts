@@ -1,3 +1,4 @@
+import { RouteType } from "src/app.service";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
 export const Roles = {
@@ -15,4 +16,7 @@ export class Role {
 
     @Column()
     description: RoleDescription;
+
+    @Column("text", {array: true, default: []})
+    forbiddenRoutes: RouteType[]
 }
