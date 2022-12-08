@@ -24,12 +24,12 @@ export class UsersService {
     const prefil = async () => {
       const testUser = await this.usersRepository.findOne({where: {username: 'myadmin'}});
       if (!testUser) {
-        const roleA = await this.rolesService.findOne('admin');
+        const roleA = await this.rolesService.findById('admin');
         const passwordA = await passwordHasher(4, 'Testing1');
         const admin = this.usersRepository.create({username: 'myadmin', password: passwordA, role: roleA})
         await this.usersRepository.save(admin);
 
-        const roleM = await this.rolesService.findOne('manager');
+        const roleM = await this.rolesService.findById('manager');
         const passwordM = await passwordHasher(4, 'Testing1');
         const manager = this.usersRepository.create({username: 'mymanager', password: passwordM, role: roleM})
         await this.usersRepository.save(manager);
@@ -41,7 +41,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const {password, role: roleId, username} = createUserDto;
     const hashedPassword = await passwordHasher(+this.configService.get('BCRYPT_SALT_ROUNDS'), password);
-    const role = await this.rolesService.findOne(roleId);
+    const role = await this.rolesService.findById(roleId);
     const newUser = this.usersRepository.create({
       ...createUserDto,
       password: hashedPassword,
@@ -83,7 +83,7 @@ export class UsersService {
     const foundUser = await this.findById(id);
 
     if (updateUserDto.role) {
-      const role = await this.rolesService.findOne(updateUserDto.role);
+      const role = await this.rolesService.findById(updateUserDto.role);
       foundUser.role = role;
     }
 

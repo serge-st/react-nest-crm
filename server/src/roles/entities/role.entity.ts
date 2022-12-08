@@ -12,10 +12,10 @@ type RoleDescription = typeof Roles[RoleId];
 @Entity('roles')
 export class Role {
     @PrimaryColumn()
-    id: RoleId;
+    id: string | RoleId;
 
     @Column()
-    description: RoleDescription;
+    description: string | RoleDescription;
 
     @Column("text", {array: true, default: []})
     forbiddenRoutes: RouteType[]
