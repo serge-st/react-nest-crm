@@ -19,9 +19,9 @@
 19. [x] Protect all routes except login
 20. [x] Add collection variable in Postman for User CRUD
 21. [x] See how to setup user info in req.user
-22. [ ] Add forbiddenRoutes to Roles DB
-23. [ ] Store routes as tuples '[method, route]'
-24. [ ] Apply tuple route approach to /approutes
+22. [x] Add forbiddenRoutes to Roles DB
+23. [x] Store routes as tuples '[method, route]'
+24. [x] Apply tuple route approach to /approutes
 25. [ ] Store the entire role object in JWT Token
 26. [ ] Compare users actual route with forbiddenRoutes array in Roles guard.
 27. [ ] Give access to /users route only for 'admin' user type.
