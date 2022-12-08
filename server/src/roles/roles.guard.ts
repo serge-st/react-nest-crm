@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { RouteType } from 'src/app.service';
 import { IS_PUBLIC_KEY } from 'src/auth/public.decorator';
-
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -17,12 +17,14 @@ export class RolesGuard implements CanActivate {
     }
 
     const {method, _parsedUrl: {path}} = context.getArgByIndex(0);
+    const currentRoute = `${method} ${path.split('/').slice(0, 2).join('/')}` as RouteType;
     const { user } = context.switchToHttp().getRequest();
     
     
     console.log('user:', user)
-    console.log('path:', method, path);
+    console.log('path:', currentRoute);
 
+    // !! should return false if actual path matches forbiddenRoutes in JWTPayload
     return true;
   }
 }

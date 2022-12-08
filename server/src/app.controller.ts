@@ -8,7 +8,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('approutes')
-  getAppRoutes(@Request() req: ExpressRequest): string[] {
+  getRoutes(@Request() req: ExpressRequest): string[] {
       return this.appService.getRoutes(req);
   }
 
