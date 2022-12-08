@@ -23,11 +23,12 @@
 23. [x] Store routes as tuples '[method, route]'
 24. [x] Apply tuple route approach to /approutes.
 25. [x] Store the entire role object in JWT Token.
-26. [ ] Create Roles controller to update roles.
+26. [x] Create Roles controller to update roles.
 27. [ ] Compare users actual route with forbiddenRoutes array in Roles guard.
 28. [ ] Give access to /users route only for 'admin' user type.
 29. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
 30. [ ] Create a simple FE to test auth and protected routes.
 31. [ ] Think about a better way to implement user roles (maybe dynamic allowed/blocked routes).
-32. [x] MAYBE, implement API endpoint to get all endpoints, [link to description](https://stackoverflow.com/questions/58255000/how-can-i-get-all-the-routes-from-all-the-modules-and-controllers-available-on)
-33. [ ] and then it would be possible to get dynamic access for user roles? /routes endpoint
+32. [ ] Add create role service/controller
+33. [x] MAYBE, implement API endpoint to get all endpoints, [link to description](https://stackoverflow.com/questions/58255000/how-can-i-get-all-the-routes-from-all-the-modules-and-controllers-available-on)
+34. [ ] and then it would be possible to get dynamic access for user roles? /routes endpoint

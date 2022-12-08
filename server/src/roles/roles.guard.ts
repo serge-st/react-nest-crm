@@ -1,6 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { RouteType } from 'src/app.service';
 import { IS_PUBLIC_KEY } from 'src/auth/public.decorator';
 
 @Injectable()
@@ -17,27 +16,19 @@ export class RolesGuard implements CanActivate {
     }
 
     const {method, _parsedUrl: {path}} = context.getArgByIndex(0);
-    const currentRoute = `${method} ${path.split('/').slice(0, 2).join('/')}` as RouteType;
+    const currentPath = path.split('/').slice(0, 2).join('/');
+    const currentFullRequest = `${method} ${currentPath}`;
     const { user: {role: {forbiddenRoutes}} } = context.switchToHttp().getRequest();
     
-    console.log('user restrictions:', forbiddenRoutes)
-    console.log('path:', currentRoute);
-    console.log();
+    // Admin case, when all routes are allowed
+    if (!forbiddenRoutes.length) return true;
 
-    if (!forbiddenRoutes.length) {
-      // Admin case, when all routes are allowed
-      return true
-    }
-    
-    // TODO 1. check if current path name matches any names in the forbiddenRoutes array
-
-    // TODO 2. check if current HTTP method matches any methods if 1. is true
-    switch (currentRoute) {
-      // case value:
-        
-    
-      default:
-        return false;
-    }
+    // Case when exact request restriction is checked
+    const index = forbiddenRoutes.findIndex(r => r.includes(currentPath));
+    if (index < 0) return true;
+    if (forbiddenRoutes[index] === currentFullRequest) return false;
+  
+    // Case when wildcard restriction is checked
+    return !(forbiddenRoutes[index].split(' ')[0] === '*');
   }
 }
