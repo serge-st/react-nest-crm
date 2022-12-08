@@ -18,12 +18,26 @@ export class RolesGuard implements CanActivate {
 
     const {method, _parsedUrl: {path}} = context.getArgByIndex(0);
     const currentRoute = `${method} ${path.split('/').slice(0, 2).join('/')}` as RouteType;
-    const { user } = context.switchToHttp().getRequest();
+    const { user: {role: {forbiddenRoutes}} } = context.switchToHttp().getRequest();
     
-    console.log('user:', user.role.forbiddenRoutes)
+    console.log('user restrictions:', forbiddenRoutes)
     console.log('path:', currentRoute);
+    console.log();
 
-    // !! should return false if actual path matches forbiddenRoutes in JWTPayload
-    return true;
+    if (!forbiddenRoutes.length) {
+      // Admin case, when all routes are allowed
+      return true
+    }
+    
+    // TODO 1. check if current path name matches any names in the forbiddenRoutes array
+
+    // TODO 2. check if current HTTP method matches any methods if 1. is true
+    switch (currentRoute) {
+      // case value:
+        
+    
+      default:
+        return false;
+    }
   }
 }
