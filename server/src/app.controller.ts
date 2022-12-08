@@ -1,6 +1,6 @@
 import { Controller, Get, Req, UseGuards, Request } from '@nestjs/common';
 import { AppService } from './app.service';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { JWTAuthGuard } from './auth/jwt-auth.guard';
 import { Request as ExpressRequest } from "express";
 
 @Controller()
@@ -18,7 +18,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JWTAuthGuard)
   @Get('/protected')
   getHelloProtected(@Req() req): string {
     console.log(req)

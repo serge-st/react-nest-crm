@@ -1,3 +1,3 @@
-export enum DbErrorCode {
+export enum DBErrorCode {
     duplicateName = '23505',
 }

@@ -8,7 +8,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import passwordHasher from './helpers/passwordHasher';
 import { RolesService } from 'src/roles/roles.service';
-import { DbErrorCode } from 'src/db-error-code.enum';
+import { DBErrorCode } from 'src/db-error-code.enum';
 
 @Injectable()
 export class UsersService {
@@ -53,7 +53,7 @@ export class UsersService {
     } catch (error) {
         // '23505' is error code returned when username already exists in the DB
         // because the password @Column decorator has { unique: true, } option
-        if (error.code === DbErrorCode.duplicateName) {
+        if (error.code === DBErrorCode.duplicateName) {
           throw new ConflictException(`Username '${username}' already exists`)
         } else {
           throw new InternalServerErrorException();
