@@ -18,8 +18,19 @@ export class AppService {
         }
       })
       .filter(item => !!item);
+    
+    const sortedResult = appRoutes.map(r => r.split(' '))
+      .sort((a, b) => {
+        const aRoute = a[1].toLocaleLowerCase();
+        const bRoute = b[1].toLocaleLowerCase();
 
-    return appRoutes as RouteType[];
+        if (aRoute < bRoute) return -1;
+        if (aRoute > bRoute) return 1;
+        return 0;
+      })
+      .map(r => r.join(' '));
+    
+    return sortedResult as RouteType[];
   }
 
   // !! Experimental stuff below:
