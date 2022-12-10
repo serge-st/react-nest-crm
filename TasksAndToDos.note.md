@@ -28,6 +28,6 @@
 28. [x] Give access to /users route only for 'admin' user type.
 29. [x] MAYBE, implement API endpoint to get all endpoints, [link to description](https://stackoverflow.com/questions/58255000/how-can-i-get-all-the-routes-from-all-the-modules-and-controllers-available-on)
 30. [x] Think about a better way to implement user roles (maybe dynamic allowed/blocked routes).
-31. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
-32. [ ] Create a simple FE to test auth and protected routes.
-33. [ ] Add create role service/controller
+31. [x] Add create role service/controller
+32. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
+33. [ ] Create a simple FE to test auth and protected routes.

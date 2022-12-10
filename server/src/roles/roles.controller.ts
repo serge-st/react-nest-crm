@@ -1,4 +1,5 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
 import { RolesService } from './roles.service';
@@ -23,6 +24,11 @@ export class RolesController {
             throw new BadRequestException(`Changing Role ID is not allowed`)
         }
         return this.rolesService.update(id, updateRoleDto);
+    }
+
+    @Post()
+    create(@Body() createRoleDto: CreateRoleDto): Promise<Role> {
+      return this.rolesService.create(createRoleDto);
     }
 
 }
