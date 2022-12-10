@@ -29,7 +29,7 @@
 29. [x] MAYBE, implement API endpoint to get all endpoints, [link to description](https://stackoverflow.com/questions/58255000/how-can-i-get-all-the-routes-from-all-the-modules-and-controllers-available-on)
 30. [x] Think about a better way to implement user roles (maybe dynamic allowed/blocked routes).
 31. [x] Add create role service/controller
-32. [ ] Initialize Vite React app and delete all unnecessary stuff
-33. [ ] Add axios and react-router-dom and create 2 simple routes
+32. [x] Initialize Vite React app and delete all unnecessary stuff, Add axios and react-router-dom
+33. [ ] Create 2 simple routes
 34. [ ] Check how to configure http request interceptor for frontend app.
 35. [ ] Investigate how to combine BE auth and permission based access to routes on FE.
