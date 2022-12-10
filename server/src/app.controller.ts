@@ -2,6 +2,7 @@ import { Controller, Get, Req, UseGuards, Request } from '@nestjs/common';
 import { AppService } from './app.service';
 import { JWTAuthGuard } from './auth/jwt-auth.guard';
 import { Request as ExpressRequest } from "express";
+import { Public } from './auth/public.decorator';
 
 @Controller()
 export class AppController {
@@ -13,6 +14,7 @@ export class AppController {
   }
 
   // !! Experimental stuff below:
+  @Public()
   @Get()
   getHello(): string {
     return this.appService.getHello();
