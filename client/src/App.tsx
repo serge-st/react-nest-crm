@@ -1,10 +1,10 @@
 import './App.css';
-import Button from '@mui/material/Button';
+import Login from './pages/Login/Login';
 
 const App = () => {
     return (
-        <div>
-            <Button variant="contained">Hello World</Button>
+        <div className='App'>
+            <Login />
         </div>
     );
 };
